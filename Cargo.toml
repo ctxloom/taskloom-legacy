@@ -27,7 +27,7 @@ angzarr-build = { git = "https://github.com/angzarr-io/angzarr-build", rev = "75
 
 # angzarr-embedded, angzarr's in-app runtime, taskloom's
 # (taskloom-on-angzarr-embedded.plan.md). Pinned by rev on
-# angzarr-embedded's main: ba73fab (router bc729ed, angzarr core 35b29de
+# angzarr-embedded's main: 5cee822 (router bec0c2b, angzarr core f6fed5e
 # for angzarr-proto, angzarr-ports and angzarr-diagnostic): the kernel at
 # its crate root, its codes `angzarr-embedded-*` and a condition the spec
 # keys coded under its key; a catch-up's step one moment of the store,
@@ -38,8 +38,8 @@ angzarr-build = { git = "https://github.com/angzarr-io/angzarr-build", rev = "75
 # (`angzarr_embedded::testing`). angzarr-proto and angzarr-store-sqlite are
 # reached through those re-exports (`angzarr_embedded::angzarr_proto`,
 # `angzarr_embedded::angzarr_store_sqlite`) and not pinned here.
-angzarr-embedded = { git = "https://github.com/angzarr-io/angzarr-embedded", rev = "94f630a38f5fc79657fb09bbc73f7def27d31335" }
-angzarr-embedded-macros = { git = "https://github.com/angzarr-io/angzarr-embedded", rev = "94f630a38f5fc79657fb09bbc73f7def27d31335" }
+angzarr-embedded = { git = "https://github.com/angzarr-io/angzarr-embedded", rev = "5cee822bf063a6e070545d14c0ec0caf387022f3" }
+angzarr-embedded-macros = { git = "https://github.com/angzarr-io/angzarr-embedded", rev = "5cee822bf063a6e070545d14c0ec0caf387022f3" }
 # angzarr core's shared crates, at the core rev angzarr-embedded pins
 # (35b29de), so the graph holds one of each. angzarr-diagnostic, the coded
 # error trait every error here implements, is pinned directly rather than

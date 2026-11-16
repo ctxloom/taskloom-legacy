@@ -300,7 +300,7 @@ clone and the pre-commit gates never read it. Restore Cargo.lock before
 committing, and land the change by pushing the sibling and bumping its rev.
 
 The angzarr pins are one set: angzarr core f6fed5e (diagnostic, ports, yaml,
-presentation, and store-transfer), angzarr-embedded 94f630a,
+presentation, and store-transfer), angzarr-embedded 5cee822,
 angzarr-platform 5f39b33, angzarr-build 7547415. Moving one moves all; the
 lock holds one of each.
 
