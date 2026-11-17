@@ -315,7 +315,7 @@ impl Env {
 
     /// The project stores under the home: one, or identities forked.
     fn stores(&self) -> Vec<PathBuf> {
-        let projects = self.home.path().join(".ctxloom/projects");
+        let projects = self.home.path().join(".ctxloom").join("projects");
         let mut stores: Vec<PathBuf> = disk::read_dir(projects)
             .expect("the projects directory")
             .into_iter()

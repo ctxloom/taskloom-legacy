@@ -67,6 +67,12 @@ fn s(path: &Path) -> String {
     path.to_string_lossy().into_owned()
 }
 
+/// `path` as the plans commands write it: `/` for every separator, on
+/// every host (plans-application's `normalized`).
+fn shown(path: &Path) -> String {
+    s(path).replace('\\', "/")
+}
+
 /// A plan file: frontmatter of `id` and `fields` (each line ending in a
 /// newline), then `body`.
 fn plan_text(id: &str, fields: &str, body: &str) -> String {
@@ -233,7 +239,8 @@ fn test_plan_roots_is_a_yaml_list_in_the_work_roots_config_file() {
     disk::create_dir_all(env.project.path().join(".taskloom")).unwrap();
     disk::write(
         env.project.path().join(".taskloom/config.yaml"),
-        format!("plan_roots:\n  - \"{}\"\n", elsewhere.path().display()),
+        // Single-quoted: a Windows path's backslashes are no escapes there.
+        format!("plan_roots:\n  - '{}'\n", elsewhere.path().display()),
     )
     .unwrap();
 
@@ -707,7 +714,7 @@ fn test_show_takes_an_id_or_a_path_and_a_plan_not_found_is_exit_1() {
     let by_id = ok(&env, &["plans", "show", "quiet-amber-falcon"]);
     let by_path = ok(&env, &["plans", "show", &s(&file)]);
     assert_eq!(by_id["id"], "quiet-amber-falcon");
-    assert_eq!(by_id["path"], s(&file).as_str());
+    assert_eq!(by_id["path"], shown(&file).as_str());
     assert_eq!(by_id["id"], by_path["id"]);
     assert_eq!(by_id["title"], by_path["title"]);
 
@@ -925,7 +932,7 @@ fn test_list_objects_carry_the_extensions_fields_and_the_new_metadata() {
     ] {
         assert!(plan.get(key).is_some(), "no {key}: {plan}");
     }
-    assert_eq!(plan["path"], s(&file).as_str());
+    assert_eq!(plan["path"], shown(&file).as_str());
     // PROPOSAL, pending owner review: `name` is the file's name without
     // `.plan.md` (the old id-named files made it the id).
     assert_eq!(plan["name"], "listed");
@@ -1178,13 +1185,13 @@ fn check_names(env: &Env, faulty: &[&Path], clean: &[&Path]) {
     let as_text = exits(env, &["plans", "check", "--format", "text"], 1);
     for file in faulty {
         for out in [&as_json.stdout, &as_text.stdout] {
-            assert!(out.contains(&s(file)), "{file:?} is not named: {out}");
+            assert!(out.contains(&shown(file)), "{file:?} is not named: {out}");
         }
     }
     for file in clean {
         for out in [&as_json.stdout, &as_text.stdout] {
             assert!(
-                !out.contains(&s(file)),
+                !out.contains(&shown(file)),
                 "{file:?} is clean but named: {out}"
             );
         }
@@ -1386,7 +1393,7 @@ impl Watching {
         let mut seen = Vec::new();
         loop {
             let line = self.line();
-            let found = line["path"] == s(path).as_str();
+            let found = line["path"] == shown(path).as_str();
             seen.push(line);
             if found {
                 return seen;
@@ -1450,7 +1457,7 @@ fn test_watch_primes_then_says_what_metadata_changed_in_each_plan_file() {
     assert_eq!(line["event"], "created", "{line}");
     assert_eq!(line["kind"], "plans");
     assert_eq!(line["id"], "quiet-amber-falcon");
-    assert_eq!(line["path"], s(&created).as_str());
+    assert_eq!(line["path"], shown(&created).as_str());
     assert_eq!(
         line["changes"],
         json!({
@@ -1519,7 +1526,7 @@ fn test_watch_primes_then_says_what_metadata_changed_in_each_plan_file() {
     assert_eq!(line["event"], "deleted", "{line}");
     assert_eq!(line["kind"], "plans");
     assert_eq!(line["id"], "quiet-amber-falcon");
-    assert_eq!(line["path"], s(&created).as_str());
+    assert_eq!(line["path"], shown(&created).as_str());
     assert_eq!(line["changes"], json!({}));
 
     // No line, from the priming one to the last, carried the body.

@@ -363,11 +363,12 @@ fn test_a_config_file_that_cannot_be_read_is_refused() {
         .create_dir_all(&dirs.root.join(".taskloom/config.yaml"), Mode::DIR)
         .unwrap();
     let error = moved(&dirs.config(&[]), &[]).unwrap_err();
-    assert!(matches!(error, ConfigError::Unreadable { .. }), "{error:?}");
-    assert!(
-        error
-            .to_string()
-            .contains(&shown("/tree/.taskloom/config.yaml")),
+    let ConfigError::Unreadable { path, .. } = &error else {
+        panic!("{error:?}");
+    };
+    assert_eq!(
+        *path,
+        shown("/tree/.taskloom/config.yaml"),
         "named as the caller names it: {error}"
     );
 }
