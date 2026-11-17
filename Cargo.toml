@@ -20,10 +20,10 @@ prost-types = "0.14"
 # own repository) is pinned by full commit, so a fresh clone builds with no
 # sibling checkouts; bumps are deliberate commits. To build against local
 # checkouts while changing them together, see "Co-developing angzarr-build or
-# tagma" in CLAUDE.md. At 9e9eff0, on angzarr core 35b29de, the rev the crates
+# tagma" in CLAUDE.md. At bd02654, on angzarr core f6fed5e, the rev the crates
 # below pin, so the graph holds one angzarr-proto and one angzarr-diagnostic
 # even counting build dependencies.
-angzarr-build = { git = "https://github.com/angzarr-io/angzarr-build", rev = "7547415ec7265c7c3c04d7d4c6903cd6b6da7fd0" }
+angzarr-build = { git = "https://github.com/angzarr-io/angzarr-build", rev = "bd02654fa044b5c988821baec330753b8d61088a" }
 
 # angzarr-embedded, angzarr's in-app runtime, taskloom's
 # (taskloom-on-angzarr-embedded.plan.md). Pinned by rev on
