@@ -301,7 +301,7 @@ committing, and land the change by pushing the sibling and bumping its rev.
 
 The angzarr pins are one set: angzarr core b1445ad (diagnostic, ports, yaml,
 presentation, and store-transfer), angzarr-embedded 5cdb190,
-angzarr-platform a930373, angzarr-build d0b63bc. Moving one moves all; the
+angzarr-platform 4be00ea, angzarr-build d0b63bc. Moving one moves all; the
 lock holds one of each.
 
 ## Errors are localizable: a code, args, and an en-US message
