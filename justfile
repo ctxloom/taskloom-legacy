@@ -11,8 +11,8 @@ TOP := `git rev-parse --show-toplevel`
 import 'gates/gates.just'
 
 # Cross-project dependency automation (dev::local, repin, land, pins-check): the
-# shared dev module of ctxloom-lib's tools/dev, linked as .dev (gitignored;
-# `tools/dev/install.sh` in a ctxloom-lib checkout). Optional: absent in a clone
+# shared dev module of rust-support's tools/dev, linked as .dev (gitignored;
+# `tools/dev/install.sh` in a rust-support checkout). Optional: absent in a clone
 # or CI without the sibling.
 mod? dev '.dev'
 
@@ -79,14 +79,14 @@ lint:
         cargo clippy "${terse[@]}" --manifest-path {{TOP}}/Cargo.toml --workspace --all-targets -- -D warnings
 
 # Nothing in this workspace names an operating system (decision 4): that is
-# angzarr-platform's os crate's alone: no cfg naming one, `cfg!(`, `std::os::`, `split_paths` or
+# angzarr's os crate's alone: no cfg naming one, `cfg!(`, `std::os::`, `split_paths` or
 # target-specific dependency, tests included, but the allowlist's
 # (scripts/os-cfg-allow.txt). `just lint` runs it first.
 [no-exit-message]
 lint-os:
     @{{TOP}}/scripts/os-cfg-check.sh
 
-# The driven adapters that use the platform crates (angzarr-platform's os,
+# The driven adapters that use the platform crates (angzarr's os,
 # and the seams over it), with those crates' Windows implementors, compiled
 # for a Windows target but not run: the quick check a Linux host can make of them before CI's Windows
 # runner builds and tests the whole workspace natively (decision 5; see

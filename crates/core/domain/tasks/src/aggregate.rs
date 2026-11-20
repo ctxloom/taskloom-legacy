@@ -26,7 +26,7 @@
 //!   task replayed;
 //! - no snapshot: a task's stream is short, and every load replays it.
 
-use angzarr_embedded::markup::{Context, Failed, PageContext, Refuses};
+use angzarr_embedded::markup::{Context, Failed, PageContext, Refuses, Snapshots};
 use angzarr_embedded_macros::{aggregate, applies, handles_cmd};
 
 use crate::refusal::refuse;
@@ -58,6 +58,11 @@ impl TaskAggregate {
 fn fold(task: &mut TaskState, event: TaskEvent, page: &PageContext) {
     let recorded_at = page.meta.and_then(|meta| meta.recorded_at);
     crate::apply(task, &event, recorded_at.unwrap_or_default());
+}
+
+/// Names the anchor, and takes no snapshots: the stream is folded whole.
+impl Snapshots for TaskAggregate {
+    type Anchor = crate::generated::TaskState;
 }
 
 // The domain is TASK_DOMAIN, spelled as the markup takes it, a literal

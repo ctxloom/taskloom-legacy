@@ -2,7 +2,7 @@
 # justfile has (gates/gates.just's fmt-check, lint-deps and test, and the
 # justfile's own build, lint, lint-os and check-windows); on Windows, natively,
 # build and test (decision 5: the platform crates' Windows implementors, which
-# angzarr-platform's CI tests, run under this workspace's tests, not only
+# angzarr's CI tests, run under this workspace's tests, not only
 # compile).
 #
 # A plain checkout: every dependency outside this repository is a git

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Decision 4 (passthrough-os-review.plan.md): what differs between operating
-# systems lives in angzarr-platform's os crate alone. Fail on a cfg (or
+# systems lives in angzarr's os crate alone. Fail on a cfg (or
 # cfg_attr) naming an OS, `cfg!(`, `std::os::` or `split_paths` anywhere
 # under crates/, tests included, and on a crate with target-specific
 # dependencies. The exceptions are the allowlist,
@@ -61,7 +61,7 @@ for i in "${!files[@]}"; do
 done
 
 if [ "$found" -gt 0 ]; then
-  echo "FAIL lint-os: $found OS-specific lines (decision 4): move them onto angzarr-platform's os crate (its Flavor or Os), or list an allowed one in $allow_file with why" >&2
+  echo "FAIL lint-os: $found OS-specific lines (decision 4): move them onto angzarr's os crate (its Flavor or Os), or list an allowed one in $allow_file with why" >&2
   exit 1
 fi
 if [ "$stale" -gt 0 ]; then

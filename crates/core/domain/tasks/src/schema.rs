@@ -20,7 +20,7 @@
 use std::fmt;
 
 use angzarr_diagnostic::{code, Arg, Diagnostic};
-use angzarr_embedded::markup::{Context, Failed, Refuses};
+use angzarr_embedded::markup::{Context, Failed, Refuses, Snapshots};
 use angzarr_embedded::v1::Uuid;
 use angzarr_embedded::{ids, WireError};
 use angzarr_embedded_macros::{aggregate, applies, handles_cmd};
@@ -70,16 +70,6 @@ pub struct SchemaState {
     /// Whether the stream has any history: a store whose schema stream has
     /// none is seeded on open.
     pub declared: bool,
-}
-
-/// A declare adding and removing nothing.
-impl Default for Declare {
-    fn default() -> Self {
-        Declare {
-            add: Vec::new(),
-            remove: Vec::new(),
-        }
-    }
 }
 
 /// Why a declare was refused.
@@ -200,6 +190,11 @@ impl SchemaAggregate {
     pub fn state(&self) -> &SchemaState {
         &self.schema
     }
+}
+
+/// Names the anchor, and takes no snapshots: the stream is folded whole.
+impl Snapshots for SchemaAggregate {
+    type Anchor = crate::generated::SchemaState;
 }
 
 // The domain is SCHEMA_DOMAIN, spelled as the markup takes it, a literal

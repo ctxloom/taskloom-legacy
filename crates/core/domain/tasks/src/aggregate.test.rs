@@ -16,7 +16,9 @@ use std::collections::BTreeMap;
 
 use angzarr_diagnostic::{code, Arg, Diagnostic};
 use angzarr_embedded::angzarr_proto::v1::AngzarrReason;
-use angzarr_embedded::markup::{Context, Emit, Failed, PageContext, TypedRefusal, Unrefusable};
+use angzarr_embedded::markup::{
+    Context, Emit, Failed, PageContext, Snapshots, TypedRefusal, Unrefusable,
+};
 use angzarr_embedded::testing::{Harness, Ready, Samples};
 use angzarr_embedded::v1::{command_page, Command, CommandBook, CommandPage, Cover, Uuid};
 use angzarr_embedded::{
@@ -1416,6 +1418,10 @@ fn keep(probe: &Probe, _: &Context) -> Result<Option<TaskAdded>, Failed<Unrefusa
 /// The task's applier, as the kernel calls it: `event` and its page.
 fn fold(probe: &mut Probe, event: impl Into<TaskEvent>, page: &PageContext) {
     <TaskAggregate as Domain>::apply(&mut probe.task, &event.into(), page);
+}
+
+impl Snapshots for Probe {
+    type Anchor = crate::generated::TaskState;
 }
 
 #[aggregate(domain = "tasks", command = TaskCommand, event = TaskEvent)]

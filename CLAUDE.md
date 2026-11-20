@@ -103,9 +103,10 @@ clippy reads the nearest `clippy.toml`. A crate's own `clippy.toml` would
 replace it, so none has one. It repeats the root `clippy.toml`'s settings,
 and `just lint` refuses to run if they disagree.
 
-The libraries adapters build on are angzarr-platform's
-(https://github.com/angzarr-io/angzarr-platform, pinned by commit, moved
-there from this repository by decision 36): `os`, everything that differs
+The libraries adapters build on are the platform crates of angzarr
+(https://github.com/angzarr-io/angzarr, pinned by commit, moved
+there from this repository by decision 36; formerly the angzarr-platform
+repository, now merged into that workspace): `os`, everything that differs
 between operating systems; the `file-system` seam over it; and
 `file-lock`'s advisory locks over both. They implement no port.
 
@@ -116,7 +117,7 @@ where a real process must see the files, an `Os` under a directory a
 (`Fs::real_path`, `Fs::open`), so a test's databases are sandboxed too.
 The root `clippy.toml` disallows `std::fs`, `Path`'s filesystem methods
 and `tempfile` everywhere, tests included; only the seam crate, in
-angzarr-platform, calls them.
+angzarr, calls them.
 
 Everything that differs between operating systems is in the `os` crate:
 `Flavor` (Unix | Windows), the logic (PATH and PATHEXT, environment
@@ -196,7 +197,7 @@ canonically.
 ## Storage is angzarr-store-sqlite
 
 A project's database is angzarr-store-sqlite's `SqliteStore` (in the
-angzarr-embedded repository), opened at
+angzarr workspace's `angzarr-embedded` crate), opened at
 `~/.ctxloom/projects/<project-id>/state.db` by task-store-sqlite's
 `SqliteStores`. ctxloom writes no SQL of its own. A store from before
 angzarr-embedded (annals-store-sql's) is refused, naming its backup
@@ -287,18 +288,19 @@ kernel's stale answer, and taskloom reads and shapes it again. Domain, projector
 angzarr-embedded's kernel over angzarr-ports' `MemoryStore`, as the binary
 runs over SQLite.
 
-## Co-developing angzarr-build or tagma
+## Co-developing angzarr or tagma
 
-angzarr-embedded, angzarr-build (the markup domain layer generator, with
-angzarr-codegen; github.com/angzarr-io/angzarr-build) and tagma are git
+angzarr (one workspace: core, angzarr-embedded, the platform crates,
+angzarr-build, the markup domain layer generator, with angzarr-codegen;
+github.com/angzarr-io/angzarr) and tagma are git
 dependencies pinned by full commit in Cargo.toml, so a fresh clone builds
 with no sibling checkouts. To change a backend and this workspace together,
-use the shared dev module (ctxloom-lib's `tools/dev`; its README is the
+use the shared dev module (rust-support's `tools/dev`; its README is the
 reference): link it once per clone (`tools/dev/install.sh <this checkout>`:
 `.dev`, gitignored; the justfile's `mod? dev '.dev'` is optional) and run `just
 dev::local`: a gitignored `.cargo/config.toml` `[patch]` onto the sibling
 checkouts' working trees, found through `~/.config/angzarr-dev/repos.toml`
-(angzarr-build has worktrees only and tagma's checkout is `~/workspace/kvtag`,
+(tagma's checkout is `~/workspace/kvtag`,
 so both are registered there) or the usual places. CI, a fresh clone and the
 pre-commit gates never read it. `just dev::local-off` undoes it and restores
 Cargo.lock, which cargo rewrites while the patch is on: never commit it that
@@ -308,10 +310,10 @@ push order, and `just dev::pins-check` (pre-commit) and `just
 dev::pins-reachable` (pre-push) refuse a path-based commit and a pin that is
 not on its remote. This replaces the former `.cargo/local-deps.toml` copy.
 
-The angzarr pins are one set: angzarr core 03663846 (diagnostic, ports, yaml,
-presentation, and store-transfer), angzarr-embedded 23a507f (router
-5e887e1), angzarr-platform ef3a446, angzarr-build 4201d14. Moving one moves all; the
-lock holds one of each.
+The angzarr pins are one commit of one repository, 8159ea33 of
+github.com/angzarr-io/angzarr (diagnostic, ports, yaml, presentation,
+store-transfer, embedded and its router, the platform crates, angzarr-build).
+They move together; the lock holds one of each.
 
 ## Errors are localizable: a code, args, and an en-US message
 

@@ -14,6 +14,13 @@
 mod generated {
     include!(concat!(env!("OUT_DIR"), "/ctxloom.tasks.v1.domain.rs"));
 }
+/// tagma's package, whose `Tag` the tasks messages hold: its domain layer is
+/// included beside the tasks', where the generated code reaches it (the
+/// build script's domain paths).
+#[allow(dead_code, unused_imports)]
+mod tagma_layer {
+    include!(concat!(env!("OUT_DIR"), "/tagma.v1.domain.rs"));
+}
 mod aggregate;
 mod refusal;
 mod rejection;
@@ -37,6 +44,7 @@ pub use refusal::NotOurs;
 pub use rejection::diagnostic_samples;
 pub use rejection::{TaskRejection, EN_US};
 pub use state::{TaskState, TASK_DOMAIN};
+pub use tagma_layer::Tag;
 
 /// The default taxonomy's initial status: the one a task gets when none is
 /// given. Decide never reads it: a command carries its own (`initial`).

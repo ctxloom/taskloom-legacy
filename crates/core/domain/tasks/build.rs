@@ -5,12 +5,19 @@
 
 fn main() -> Result<(), angzarr_build::BuildError> {
     angzarr_diagnostic::build::catalogs();
-    angzarr_build::markup_domain(
+    angzarr_build::markup_domain_with(
         &[
             "ctxloom/tasks/v1/tasks.proto",
             "ctxloom/tasks/v1/schema.proto",
         ],
         &["../../../../proto", tagma_proto::PROTO_INCLUDE],
-        &[("ctxloom.tasks.v1", "::tasks_proto::v1")],
+        &[
+            ("ctxloom.tasks.v1", "::tasks_proto::v1"),
+            ("tagma.v1", "::tasks_proto::tagma::v1"),
+        ],
+        &[
+            ("ctxloom.tasks.v1", "crate::generated"),
+            ("tagma.v1", "crate::tagma_layer"),
+        ],
     )
 }
