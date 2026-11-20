@@ -14,9 +14,9 @@ ignore = [
 
 [licenses]
 version = 2
-# ctxloom is AGPL-3.0-only; every license here may be combined with it.
+# taskloom is Apache-2.0 OR BSD-3-Clause; only permissive licenses are allowed
+# here, and the angzarr crates below are the sole copyleft exceptions.
 allow = [
-  "AGPL-3.0-only",
   "Apache-2.0",
   "BSD-3-Clause",
   "MIT",
