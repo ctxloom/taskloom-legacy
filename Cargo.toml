@@ -16,19 +16,19 @@ publish = false
 prost = "0.14"
 prost-types = "0.14"
 
-# angzarr-build (the markup domain layer generator, with angzarr-codegen; its
-# own repository) is pinned by full commit, so a fresh clone builds with no
+# angzarr-build (the markup domain layer generator, with angzarr-codegen) is
+# a crate of the angzarr workspace (github.com/angzarr-io/angzarr), pinned by full commit, so a fresh clone builds with no
 # sibling checkouts; bumps are deliberate commits. To build against local
 # checkouts while changing them together, see "Co-developing angzarr or
-# tagma" in CLAUDE.md. At 4201d14, on angzarr core 03663846, the rev the crates
-# below pin, so the graph holds one angzarr-proto and one angzarr-diagnostic
-# even counting build dependencies.
+# tagma" in CLAUDE.md. Every angzarr crate below is at the same commit, so the
+# graph holds one angzarr-proto and one angzarr-diagnostic even counting build
+# dependencies.
 angzarr-build = { git = "https://github.com/angzarr-io/angzarr", rev = "8159ea33c883486d71cae08691216a779f9fcfda" }
 
 # angzarr-embedded, angzarr's in-app runtime, taskloom's
-# (taskloom-on-angzarr-embedded.plan.md). Pinned by rev on
-# angzarr-embedded's main: 23a507f (router 5e887e1, angzarr core 03663846
-# for angzarr-proto, angzarr-ports and angzarr-diagnostic): the kernel at
+# (taskloom-on-angzarr-embedded.plan.md). Pinned by rev on angzarr's main
+# (the router, angzarr-proto, angzarr-ports and angzarr-diagnostic are its
+# sibling crates at that same commit): the kernel at
 # its crate root, its codes `angzarr-embedded-*` and a condition the spec
 # keys coded under its key; a catch-up's step one moment of the store,
 # its purges told from the covers its own read listed; and angzarr-proto,
@@ -40,8 +40,7 @@ angzarr-build = { git = "https://github.com/angzarr-io/angzarr", rev = "8159ea33
 # `angzarr_embedded::angzarr_store_sqlite`) and not pinned here.
 angzarr-embedded = { git = "https://github.com/angzarr-io/angzarr", rev = "8159ea33c883486d71cae08691216a779f9fcfda" }
 angzarr-embedded-macros = { git = "https://github.com/angzarr-io/angzarr", rev = "8159ea33c883486d71cae08691216a779f9fcfda" }
-# angzarr core's shared crates, at the core rev angzarr-embedded pins
-# (35b29de), so the graph holds one of each. angzarr-diagnostic, the coded
+# angzarr core's shared crates, at the commit angzarr-embedded is at, so the graph holds one of each. angzarr-diagnostic, the coded
 # error trait every error here implements, is pinned directly rather than
 # through angzarr-embedded's re-export so the crates that have no use for
 # the kernel do not link it; with its `build` feature, it is every crate's
