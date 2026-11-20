@@ -292,12 +292,21 @@ runs over SQLite.
 angzarr-embedded, angzarr-build (the markup domain layer generator, with
 angzarr-codegen; github.com/angzarr-io/angzarr-build) and tagma are git
 dependencies pinned by full commit in Cargo.toml, so a fresh clone builds
-with no sibling checkouts. To change angzarr-build or tagma and this
-workspace together, `cp .cargo/local-deps.toml .cargo/config.toml`: a
-gitignored `[patch]` onto the sibling checkouts (angzarr-build at
-`../../angzarr/angzarr-build/main`, tagma at `../../kvtag`). CI, a fresh
-clone and the pre-commit gates never read it. Restore Cargo.lock before
-committing, and land the change by pushing the sibling and bumping its rev.
+with no sibling checkouts. To change a backend and this workspace together,
+use the shared dev module (ctxloom-lib's `tools/dev`; its README is the
+reference): link it once per clone (`tools/dev/install.sh <this checkout>`:
+`.dev`, gitignored; the justfile's `mod? dev '.dev'` is optional) and run `just
+dev::local`: a gitignored `.cargo/config.toml` `[patch]` onto the sibling
+checkouts' working trees, found through `~/.config/angzarr-dev/repos.toml`
+(angzarr-build has worktrees only and tagma's checkout is `~/workspace/kvtag`,
+so both are registered there) or the usual places. CI, a fresh clone and the
+pre-commit gates never read it. `just dev::local-off` undoes it and restores
+Cargo.lock, which cargo rewrites while the patch is on: never commit it that
+way. `just dev::doctor` says what was found; `just dev::repin` moves the pins
+to the siblings' HEADs, `just dev::land` prints (and with `--go` performs) the
+push order, and `just dev::pins-check` (pre-commit) and `just
+dev::pins-reachable` (pre-push) refuse a path-based commit and a pin that is
+not on its remote. This replaces the former `.cargo/local-deps.toml` copy.
 
 The angzarr pins are one set: angzarr core 03663846 (diagnostic, ports, yaml,
 presentation, and store-transfer), angzarr-embedded 23a507f (router

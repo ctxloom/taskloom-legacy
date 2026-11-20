@@ -10,9 +10,15 @@ TOP := `git rev-parse --show-toplevel`
 
 import 'gates/gates.just'
 
+# Cross-project dependency automation (dev::local, repin, land, pins-check): the
+# shared dev module of ctxloom-lib's tools/dev, linked as .dev (gitignored;
+# `tools/dev/install.sh` in a ctxloom-lib checkout). Optional: absent in a clone
+# or CI without the sibling.
+mod? dev '.dev'
+
 # The staged tree is a sibling of the checkout, not under target/: cargo
 # reads .cargo/config.toml from every parent directory, so under the checkout
-# it would pick up a local-deps override (.cargo/local-deps.toml) and gate the
+# it would pick up a local-deps override (a generated dev-module config) and gate the
 # sibling checkouts instead of the commit's pinned dependencies.
 staged_tree := "../.{name}.staged"
 
